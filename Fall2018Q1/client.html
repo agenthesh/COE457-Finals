@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <title>Fall2018 Final</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+
+<body>
+    <p>Result : <output name="" type="text" id="result" value"readonly"></output> </p>
+    <input type="button" value="Save to Database" onclick="ws.send(document.getElementById('result').value);">
+    <input type="button" value="Fetch Graph Data" id="fetchChartData">
+
+    <br><br><br>
+
+    <canvas id="myChart"></canvas>
+
+</body>
+<script>
+    //for getting temprature values 
+    var ws = new WebSocket('ws://localhost:80');
+    ws.onmessage = function (event) {
+        document.getElementById("result").value = event.data;
+    }
+
+    //For fetching chart data
+    $("#fetchChartData").click(function () {
+
+        $.ajax({
+            url: "/chartData",
+            type: "GET",
+            success: function (result) {
+                console.log(result);
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20], //the number of labels shows the number of datapoints there are, but idk how to automatically generate the labels, probably you could use a function that counts the results and creates an array. Or you could just send time with the data and use a XY dataset. 
+                        datasets: [{
+                            label: 'Tempratures',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: result
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            }
+        });
+    });
+
+</script>
+</body>
+
+</html>
