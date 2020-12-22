@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <title>Question 1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <span>a:</span> <input type="number" name="inputA" id="inputA">
+    <p id="outputA">answer</p>
+    <span>a:</span> <input type="number" name="inputA" id="inputB">
+    <p id="outputB">answer</p>
+    <br>
+    <br>
+    <br>
+    <input type="button" value="Add 1 to each row" id="addbutton">
+</body>
+
+<script>
+    $(document).ready(function () {
+    $("#addbutton").click(function () {
+        $.get("http://localhost:9999/", { a: $("#inputA").val(), b:$("#inputB").val()}, function (data) {
+            console.log(data);
+            $("#outputA").html(data.a);
+            $("#outputB").html(data.b);
+            console.log("posted");
+        });
+    });
+
+});
+</script>
+
+
+
+</html>
